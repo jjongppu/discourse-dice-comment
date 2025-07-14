@@ -4,7 +4,7 @@ function initialize(api) {
   api.onPageChange(() => {
     const topicController = api.container.lookup('controller:topic');
     const topic = topicController?.model;
-    const footer = document.querySelector('.topic-footer-main-buttons') || document.querySelector('.topic-footer-buttons');
+    const footer = document.querySelector('.topic-footer-main-buttons');
     if (!topic || !footer) { return; }
 
     if (topic.dice_only) {
