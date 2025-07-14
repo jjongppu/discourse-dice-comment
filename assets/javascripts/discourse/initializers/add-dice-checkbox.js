@@ -2,7 +2,7 @@ import { withPluginApi } from 'discourse/lib/plugin-api';
 
 function initialize(api) {
 
-  api.decorateWidget('composer-editor:after', helper => {
+  api.decorateWidget('composer-fields:after', helper => {
     const model = helper.widget.model;
     if (model.dice_only === undefined) model.dice_only = false;
     if (model.dice_min === undefined) model.dice_min = 0;
