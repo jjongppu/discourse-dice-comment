@@ -35,7 +35,7 @@ after_initialize do
 
       min = topic.custom_fields['dice_min'].to_i
       max = topic.custom_fields['dice_max'].to_i
-      min = 1 if min <= 0
+      min = 0 if min < 0
       max = 100 if max <= 0 || max < min
 
       roll = rand(min..max)
