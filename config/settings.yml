@@ -1,0 +1,4 @@
+plugins:
+  dice_comment_enabled:
+    default: true
+    client: true
