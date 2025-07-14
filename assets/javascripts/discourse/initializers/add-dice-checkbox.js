@@ -1,10 +1,12 @@
 import { withPluginApi } from 'discourse/lib/plugin-api';
 
 function initialize(api) {
-  api.addComposerFields({ dice_only: false, dice_min: 1, dice_max: 100 });
 
   api.decorateWidget('composer-fields:after', helper => {
     const model = helper.widget.model;
+    if (model.dice_only === undefined) model.dice_only = false;
+    if (model.dice_min === undefined) model.dice_min = 1;
+    if (model.dice_max === undefined) model.dice_max = 100;
     const checkbox = helper.h('label.dice-only', [
       helper.h('input.dice-only-checkbox', {
         type: 'checkbox',
