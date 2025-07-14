@@ -16,14 +16,16 @@ function initialize(api) {
     }
   });
 
-  api.decorateComposer((composer) => {
-    composer.addField('dice_only');
-    composer.addField('dice_min');
-    composer.addField('dice_max');
-    if (composer.dice_only === undefined) composer.dice_only = false;
-    if (composer.dice_min === undefined) composer.dice_min = 1;
-    if (composer.dice_max === undefined) composer.dice_max = 100;
-  });
+  if (typeof api.decorateComposer === 'function') {
+    api.decorateComposer((composer) => {
+      composer.addField('dice_only');
+      composer.addField('dice_min');
+      composer.addField('dice_max');
+      if (composer.dice_only === undefined) composer.dice_only = false;
+      if (composer.dice_min === undefined) composer.dice_min = 1;
+      if (composer.dice_max === undefined) composer.dice_max = 100;
+    });
+  }
 }
 
 export default {
