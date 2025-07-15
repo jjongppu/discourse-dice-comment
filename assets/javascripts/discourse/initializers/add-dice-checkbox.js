@@ -4,26 +4,50 @@ export default {
   name: "dice-comment-checkbox",
   initialize() {
     withPluginApi("0.8.7", (api) => {
-    try {
-        api.decorateWidget("composer-fields:after", (helper) => {
-          const model = helper.widget.model;
-          if (model.action !== "createTopic") return;
+      // 💾 모델에 필드 바인딩
+      api.modifyClass("controller:composer", {
+        pluginId: "discourse-dice-comment",
+        init() {
+          this._super(...arguments);
+          if (this.creatingTopic) {
+            if (this.model.dice_only === undefined) {
+              this.model.set("dice_only", false);
+            }
+          }
+        },
+      });
 
-          const checkbox = helper.h("label.dice-only", [
-            helper.h("input.dice-only-checkbox", {
-              type: "checkbox",
-              checked: model.dice_only || false,
-              onchange: (e) => (model.dice_only = e.target.checked),
-            }),
-            helper.h("span", "주사위댓글 전용"),
-          ]);
+      // 🧩 글쓰기 창 열릴 때 DOM 삽입
+      api.onAppEvent("composer:opened", () => {
+        const composerEl = document.querySelector(".composer-fields");
+        if (!composerEl || composerEl.querySelector("#dice-only-checkbox")) return;
 
-          return helper.h("div.dice-only-wrapper", [checkbox]);
+        const checkboxLabel = document.createElement("label");
+        checkboxLabel.className = "dice-only";
+        checkboxLabel.style.display = "flex";
+        checkboxLabel.style.alignItems = "center";
+        checkboxLabel.style.gap = "6px";
+        checkboxLabel.style.marginTop = "10px";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = "dice-only-checkbox";
+
+        const span = document.createElement("span");
+        span.innerText = "주사위댓글 전용";
+
+        checkboxLabel.appendChild(checkbox);
+        checkboxLabel.appendChild(span);
+        composerEl.appendChild(checkboxLabel);
+
+        // 🧠 모델 연동
+        const composerController = api.container.lookup("controller:composer");
+        checkbox.checked = composerController.model.dice_only || false;
+
+        checkbox.addEventListener("change", (e) => {
+          composerController.model.set("dice_only", e.target.checked);
         });
-      } catch (e) {
-        console.warn("[dice-comment] composer-fields 위젯이 아직 등록되지 않았습니다.");
-      }
+      });
     });
-    
   },
 };
