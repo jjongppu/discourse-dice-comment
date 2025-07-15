@@ -22,6 +22,10 @@ after_initialize do
     # 이게 핵심이야
     dice_only = opts[:dice_only]
     dice_max = opts[:dice_max]
+
+    Rails.logger.warn("🎯 opts: #{opts}")
+
+    Rails.logger.warn("🎯 opts inspect: #{opts.inspect}")
   
     # 또는 이런 식으로도 가능
     # dice_only = opts.dig(:topic_fields, "dice_only")
