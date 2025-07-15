@@ -19,16 +19,16 @@ export default {
           }
         },
 
-        // save() {
-        //   if (this.model.creatingTopic) {
-        //     this.model.set("extraFields", {
-        //       ...this.model.extraFields,
-        //       dice_only: this.model.dice_only,
-        //       dice_max: this.model.dice_max,
-        //     });
-        //   }
-        //   return this._super(...arguments);
-        // },
+        save() {
+          if (this.model.creatingTopic) {
+            this.model.setProperties({
+              dice_only: this.model.dice_only,
+              dice_max: this.model.dice_max,
+            });
+          }
+          return this._super(...arguments);
+        },
+        
         
       });
 
