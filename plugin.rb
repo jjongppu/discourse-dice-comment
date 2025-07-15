@@ -19,8 +19,13 @@ after_initialize do
   register_topic_custom_field_type('dice_max', :integer)
 
   DiscourseEvent.on(:topic_created) do |topic, params, _user|
-    topic.custom_fields["dice_only"] = ActiveModel::Type::Boolean.new.cast(params[:dice_only])
+    Rails.logger.warn("🎯 DICE PARAMS: #{params.inspect}")
+  
+    topic.custom_fields["dice_only"] = params[:dice_only]
     topic.custom_fields["dice_max"] = params[:dice_max]
     topic.save_custom_fields
+  
+    Rails.logger.warn("✅ SAVED FIELDS: #{topic.custom_fields.inspect}")
   end
+  
 end
