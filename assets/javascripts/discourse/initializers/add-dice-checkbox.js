@@ -19,17 +19,21 @@ export default {
           }
         },
 
-        save() {
-          if (this.model.creatingTopic) {
-            this.model.set("extraFields", {
-              ...this.model.extraFields,
-              dice_only: this.model.dice_only,
-              dice_max: this.model.dice_max,
-            });
-          }
-          return this._super(...arguments);
-        },
+        // save() {
+        //   if (this.model.creatingTopic) {
+        //     this.model.set("extraFields", {
+        //       ...this.model.extraFields,
+        //       dice_only: this.model.dice_only,
+        //       dice_max: this.model.dice_max,
+        //     });
+        //   }
+        //   return this._super(...arguments);
+        // },
+        
       });
+
+      api.serializeToTopic("dice_only", "topic.dice_only");
+      api.serializeToTopic("dice_max", "topic.dice_max");
 
       api.onAppEvent("composer:opened", () => {
         const composerEl = document.querySelector(".composer-fields");
