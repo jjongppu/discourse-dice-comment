@@ -24,7 +24,7 @@ after_initialize do
     Rails.logger.warn("🎯 dice_only: #{opts.dig(:topic_fields, 'dice_only').inspect}")
     Rails.logger.warn("🎯 dice_max: #{opts.dig(:topic_fields, 'dice_max').inspect}")
 
-    Rails.logger.warn("🎯 topic: #{topic_created.inspect}")
+    Rails.logger.warn("🎯 topic: #{topic.inspect}")
   
     dice_only = ActiveModel::Type::Boolean.new.cast(opts.dig(:topic_fields, "dice_only"))
     dice_max = opts.dig(:topic_fields, "dice_max").to_i
