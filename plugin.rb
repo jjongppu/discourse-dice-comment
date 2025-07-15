@@ -15,27 +15,42 @@ after_initialize do
   require_relative 'config/routes'
   load File.expand_path('app/serializers/topic_view_serializer_extension.rb', __dir__)
 
-  register_topic_custom_field_type('dice_only', :boolean)
-  register_topic_custom_field_type('dice_max', :integer)
+  fields = [
+    { name: 'dice_only', type: 'boolean' },
+    { name: 'dice_max', type: 'integer' }
+  ]
 
-  DiscourseEvent.on(:topic_created) do |topic, opts, _user|
-    Rails.logger.warn("🎯 opts: #{opts.inspect}")
-    Rails.logger.warn("🎯 opts[:topic_fields]: #{opts[:topic_fields].inspect}")
-    Rails.logger.warn("🎯 dice_only: #{opts.dig(:topic_fields, 'dice_only').inspect}")
-    Rails.logger.warn("🎯 dice_max: #{opts.dig(:topic_fields, 'dice_max').inspect}")
+  fields.each do |field|
+    register_topic_custom_field_type(field[:name], field[:type])
 
-    Rails.logger.warn("🎯 topic: #{topic.inspect}")
-  
-    dice_only = ActiveModel::Type::Boolean.new.cast(opts.dig(:topic_fields, "dice_only"))
-    dice_max = opts.dig(:topic_fields, "dice_max").to_i
-  
-    topic.custom_fields["dice_only"] = dice_only
-    topic.custom_fields["dice_max"] = dice_max
-    topic.save_custom_fields
-  
-    Rails.logger.warn("🎯 FINAL FIELDS: #{topic.custom_fields.inspect}")
+    add_to_class(:topic, field[:name].to_sym) do
+      custom_fields[field[:name]]
+    end
+
+    add_to_class(:topic, "#{field[:name]}=") do |value|
+      custom_fields[field[:name]] = value
+    end
+
+    DiscourseEvent.on(:topic_created) do |topic, opts, _user|
+      topic.send("#{field[:name]}=", opts[field[:name].to_sym])
+      topic.save!
+    end
+
+    PostRevisor.track_topic_field(field[:name].to_sym) do |tc, value|
+      tc.record_change(field[:name], tc.topic.send(field[:name]), value)
+      tc.topic.send("#{field[:name]}=", value.present? ? value : nil)
+    end
+
+    add_to_serializer(:topic_view, field[:name].to_sym) do
+      object.topic.send(field[:name])
+    end
+
+    add_preloaded_topic_list_custom_field(field[:name])
+
+    add_to_serializer(:topic_list_item, field[:name].to_sym) do
+      object.send(field[:name])
+    end
   end
-  
     
   
 end
