@@ -31,7 +31,7 @@ after_initialize do
       custom_fields[field[:name]] = value
     end
 
-    DiscourseEvent.on(:topic_created) do |topic, opts, _user|
+    DiscourseEvent.on(:topic_created) do |topic, opts, user|
       topic.send("#{field[:name]}=", opts[field[:name].to_sym])
       topic.save!
     end
@@ -51,6 +51,19 @@ after_initialize do
       object.send(field[:name])
     end
   end
+
+  DiscourseEvent.on(:post_created) do |post, opts, user|
+    topic = post.topic
+    next unless topic.present?
+  
+    if topic.custom_fields["dice_only"].to_s == "true"
+      unless post.raw.to_s.strip.start_with?("/roll")
+        raise Discourse::InvalidAccess.new("주사위만 굴릴 수 있습니다!")
+      end
+    end
+  end
+  
+  
     
   
 end
