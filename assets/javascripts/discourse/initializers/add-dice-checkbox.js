@@ -6,6 +6,7 @@ export default {
     withPluginApi("0.8.7", (api) => {
       api.modifyClass("controller:composer", {
         pluginId: "discourse-dice-comment",
+
         init() {
           this._super(...arguments);
           if (this.creatingTopic) {
@@ -16,6 +17,17 @@ export default {
               this.model.set("dice_max", 100);
             }
           }
+        },
+
+        save() {
+          if (this.model.creatingTopic) {
+            this.model.set("extraFields", {
+              ...this.model.extraFields,
+              dice_only: this.model.dice_only,
+              dice_max: this.model.dice_max,
+            });
+          }
+          return this._super(...arguments);
         },
       });
 
@@ -67,13 +79,6 @@ export default {
         diceMaxInput.addEventListener("change", (e) => {
           composerController.model.set("dice_max", parseInt(e.target.value, 10));
         });
-      });
-
-      api.addComposerSaveOptionsCallback((model, saveOptions) => {
-        if (model.creatingTopic) {
-          saveOptions.dice_only = model.dice_only;
-          saveOptions.dice_max = model.dice_max;
-        }
       });
     });
   },
