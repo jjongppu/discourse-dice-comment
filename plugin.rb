@@ -20,9 +20,11 @@ after_initialize do
 
   DiscourseEvent.on(:topic_created) do |topic, params, _user|
     Rails.logger.warn("🎯 DICE PARAMS: #{params.inspect}")
+
+    extra = params[:topic][:extra_fields] rescue {}
   
-    topic.custom_fields["dice_only"] = params[:dice_only]
-    topic.custom_fields["dice_max"] = params[:dice_max]
+    topic.custom_fields["dice_only"] = extra[:dice_only]
+    topic.custom_fields["dice_max"] = extra[:dice_max]
     topic.save_custom_fields
   
     Rails.logger.warn("✅ SAVED FIELDS: #{topic.custom_fields.inspect}")
