@@ -20,6 +20,7 @@ after_initialize do
 
   DiscourseEvent.on(:topic_created) do |topic, params, _user|
     Rails.logger.warn("🎯 DICE PARAMS: #{params.inspect}")
+    Rails.logger.warn("✔️ topic PARAMS: #{topic.inspect}")
 
     topic.custom_fields["dice_only"] = params.dig(:topic, :dice_only)
     topic.custom_fields["dice_max"] = params.dig(:topic, :dice_max)
