@@ -16,15 +16,11 @@ after_initialize do
   load File.expand_path('app/serializers/topic_view_serializer_extension.rb', __dir__)
 
   register_topic_custom_field_type('dice_only', :boolean)
-  register_topic_custom_field_type('dice_min', :integer)
   register_topic_custom_field_type('dice_max', :integer)
 
   DiscourseEvent.on(:topic_created) do |topic, params, _user|
-    if params[:dice_only].present?
-      topic.custom_fields['dice_only'] = params[:dice_only]
-      topic.custom_fields['dice_min'] = params[:dice_min]
-      topic.custom_fields['dice_max'] = params[:dice_max]
-      topic.save_custom_fields
-    end
+    topic.custom_fields["dice_only"] = ActiveModel::Type::Boolean.new.cast(params[:dice_only])
+    topic.custom_fields["dice_max"] = params[:dice_max]
+    topic.save_custom_fields
   end
 end
