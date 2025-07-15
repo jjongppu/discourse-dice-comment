@@ -9,8 +9,6 @@ enabled_site_setting :dice_comment_enabled
 
 
 register_asset 'stylesheets/common/dice-comment.scss'
-register_asset 'javascripts/discourse/initializers/add-dice-checkbox.js', :server_side
-register_asset 'javascripts/discourse/initializers/dice-button.js', :server_side
 
 after_initialize do
   require_relative 'lib/discourse_dice_comment/engine'
