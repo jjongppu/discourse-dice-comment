@@ -20,12 +20,11 @@ after_initialize do
 
   DiscourseEvent.on(:topic_created) do |topic, params, _user|
     Rails.logger.warn("🎯 DICE PARAMS: #{params.inspect}")
-    Rails.logger.warn("✔️ topic PARAMS: #{topic.inspect}")
-    Rails.logger.warn("🎯 dice_only: #{params[:dice_only]}")
-    Rails.logger.warn("🎯 dice_max: #{params[:dice_max]}")
+    Rails.logger.warn("🎯 dice_only: #{params["dice_only"]}")
+    Rails.logger.warn("🎯 dice_max: #{params["dice_max"]}")
   
-    topic.custom_fields["dice_only"] = params[:dice_only]
-    topic.custom_fields["dice_max"] = params[:dice_max]
+    topic.custom_fields["dice_only"] = params["dice_only"] == "true"
+    topic.custom_fields["dice_max"] = params["dice_max"].to_i
     topic.save_custom_fields
   
     Rails.logger.warn("✅ SAVED FIELDS: #{topic.custom_fields.inspect}")
