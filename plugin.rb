@@ -18,16 +18,19 @@ after_initialize do
   register_topic_custom_field_type('dice_only', :boolean)
   register_topic_custom_field_type('dice_max', :integer)
 
-  DiscourseEvent.on(:topic_created) do |topic, params, _user|
-    Rails.logger.warn("🎯 DICE PARAMS: #{params.inspect}")
-    Rails.logger.warn("🎯 dice_only: #{params["dice_only"]}")
-    Rails.logger.warn("🎯 dice_max: #{params["dice_max"]}")
+  DiscourseEvent.on(:topic_created) do |topic, opts, user|
+    # 이게 핵심이야
+    dice_only = opts[:dice_only]
+    dice_max = opts[:dice_max]
   
-    topic.custom_fields["dice_only"] = params["dice_only"] == "true"
-    topic.custom_fields["dice_max"] = params["dice_max"].to_i
+    # 또는 이런 식으로도 가능
+    # dice_only = opts.dig(:topic_fields, "dice_only")
+  
+    topic.custom_fields["dice_only"] = ActiveModel::Type::Boolean.new.cast(dice_only)
+    topic.custom_fields["dice_max"] = dice_max.to_i
     topic.save_custom_fields
   
-    Rails.logger.warn("✅ SAVED FIELDS: #{topic.custom_fields.inspect}")
+    Rails.logger.warn("🎯 FINAL FIELDS: #{topic.custom_fields.inspect}")
   end
     
   
