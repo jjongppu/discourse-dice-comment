@@ -32,8 +32,8 @@ export default {
         
       });
 
-      api.serializeToTopic("dice_only", "topic.dice_only");
-      api.serializeToTopic("dice_max", "topic.dice_max");
+      api.serializeToTopic("dice_only", "dice_only");
+      api.serializeToTopic("dice_max", "dice_max");
 
       api.onAppEvent("composer:opened", () => {
         const composerEl = document.querySelector(".composer-fields");
