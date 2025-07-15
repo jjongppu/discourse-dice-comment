@@ -7,9 +7,6 @@
 
 enabled_site_setting :dice_comment_enabled
 
-register_topic_custom_field_type('dice_only', :boolean)
-register_topic_custom_field_type('dice_min', :integer)
-register_topic_custom_field_type('dice_max', :integer)
 
 register_asset 'stylesheets/common/dice-comment.scss'
 register_asset 'javascripts/discourse/initializers/add-dice-checkbox.js', :server_side
@@ -19,6 +16,10 @@ after_initialize do
   require_relative 'lib/discourse_dice_comment/engine'
   require_relative 'config/routes'
   load File.expand_path('app/serializers/topic_view_serializer_extension.rb', __dir__)
+
+  register_topic_custom_field_type('dice_only', :boolean)
+  register_topic_custom_field_type('dice_min', :integer)
+  register_topic_custom_field_type('dice_max', :integer)
 
   DiscourseEvent.on(:topic_created) do |topic, params, _user|
     if params[:dice_only].present?
