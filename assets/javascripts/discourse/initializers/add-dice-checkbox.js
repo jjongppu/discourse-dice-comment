@@ -41,6 +41,11 @@ export default {
       api.serializeToTopic("dice_max", "dice_max");
 
       api.onAppEvent("composer:opened", () => {
+
+        // Topic 일 경우만 활성
+        if (composerController.model.action !== "createTopic") return;
+
+
         const composerEl = document.querySelector(".composer-fields");
         if (!composerEl || composerEl.querySelector("#dice-only-checkbox")) return;
 
