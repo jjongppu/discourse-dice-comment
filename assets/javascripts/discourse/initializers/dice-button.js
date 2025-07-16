@@ -66,9 +66,27 @@ function initialize(api) {
           diceBtn.className = "btn btn-primary dice-roll-button";
           diceBtn.innerText = "🎲 주사위 굴리기";
           diceBtn.style.marginLeft = "1em";
+
+
           diceBtn.addEventListener("click", () => {
-            alert("주사위 굴리기 기능은 아직 구현되지 않았습니다!");
+
+            fetch("/dice/roll", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": Discourse.csrfToken,
+              },
+              body: JSON.stringify({ topic_id: topicId }),
+            })
+              .then((res) => res.json())
+              .then(() => {
+                alert("🎲 주사위 결과가 댓글로 등록되었어요!");
+              });
+
+              
           });
+
+
           actionArea.appendChild(diceBtn);
         }
       })

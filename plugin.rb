@@ -52,16 +52,7 @@ after_initialize do
     end
   end
 
-  DiscourseEvent.on(:post_created) do |post, opts, user|
-    topic = post.topic
-    next unless topic.present?
-  
-    if topic.custom_fields["dice_only"].to_s == "true"
-      unless post.raw.to_s.strip.start_with?("/roll")
-        raise Discourse::InvalidAccess.new("주사위만 굴릴 수 있습니다!")
-      end
-    end
-  end
+
   
   
     
