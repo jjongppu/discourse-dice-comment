@@ -27,12 +27,21 @@ function initialize(api) {
     const topicController = api.container.lookup("controller:topic");
     const topic = topicController?.model;
 
-    if (!topic || topic.dice_only?.toString() !== "true") return;
+    // 🎯 주사위 토픽이 아닌 경우 복원 처리
+    if (!topic || topic.dice_only?.toString() !== "true") {
+      // 💥 주사위 안내 문구 제거
+      document.querySelector(".dice-only-notice")?.remove();
 
-    // 🎯 댓글창 DOM 자체 제거
+      // 💥 주사위 버튼 제거
+      document.querySelector(".dice-roll-button")?.remove();
+
+      return;
+    }
+
+    // 🎯 댓글창 제거
     document.querySelectorAll(".composer-container")?.forEach((el) => el.remove());
 
-    // 🎯 댓글 버튼, 인용, 답글 버튼 제거
+    // 🎯 댓글, 인용, 답글 버튼 제거
     document
       .querySelectorAll("button.create, button.reply, .post-controls .reply, .post-controls .quote")
       .forEach((el) => el.remove());
@@ -44,8 +53,7 @@ function initialize(api) {
       notice.className = "dice-only-notice";
       notice.style =
         "margin: 1em 0; padding: 1em; background: #f5f5f5; border-radius: 6px; text-align: center;";
-      notice.innerText =
-        "🎲 이 토픽은 주사위 댓글 전용입니다. 일반 댓글을 작성할 수 없습니다.";
+      notice.innerText = "🎲 이 토픽은 주사위 댓글 전용입니다. 일반 댓글을 작성할 수 없습니다.";
       timelineEl.parentNode.insertBefore(notice, timelineEl);
     }
 
@@ -61,13 +69,12 @@ function initialize(api) {
           diceBtn.addEventListener("click", () => {
             const topicId = topic.id;
 
-            fetch("/dice/roll", {
+            fetch(`/dice/roll-dice/${topic.id}`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
                 "X-CSRF-Token": api.csrfToken,
-              },
-              body: JSON.stringify({ topic_id: topicId }),
+              }
             })
               .then((res) => {
                 if (!res.ok) throw new Error("실패");
