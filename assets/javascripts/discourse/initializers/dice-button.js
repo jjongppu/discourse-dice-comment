@@ -65,7 +65,7 @@ function initialize(api) {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                "X-CSRF-Token": api.csrfToken(),
+                "X-CSRF-Token": api.csrfToken,
               },
               body: JSON.stringify({ topic_id: topicId }),
             })
