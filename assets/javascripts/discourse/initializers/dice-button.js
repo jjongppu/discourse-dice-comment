@@ -29,19 +29,13 @@ function initialize(api) {
 
     if (!topic || topic.dice_only?.toString() !== "true") return;
 
-    // 🔒 댓글창 숨김
-    const composerContainer = document.querySelector(".composer-container");
-    if (composerContainer) {
-      composerContainer.style.display = "none";
-    }
+    // 🎯 댓글창 DOM 자체 제거
+    document.querySelectorAll(".composer-container")?.forEach((el) => el.remove());
 
-    // 🔒 댓글 버튼 및 인용/답글 숨김
-    const replyButtons = document.querySelectorAll(
-      "button.create, button.reply, .post-controls .reply, .post-controls .quote"
-    );
-    replyButtons.forEach((btn) => {
-      btn.style.display = "none";
-    });
+    // 🎯 댓글 버튼, 인용, 답글 버튼 제거
+    document
+      .querySelectorAll("button.create, button.reply, .post-controls .reply, .post-controls .quote")
+      .forEach((el) => el.remove());
 
     // 💬 안내 문구 삽입
     const timelineEl = document.querySelector(".topic-timeline");
@@ -55,8 +49,8 @@ function initialize(api) {
       timelineEl.parentNode.insertBefore(notice, timelineEl);
     }
 
-    // 🎲 주사위 굴리기 버튼 생성
-    waitForElement(".topic-footer-main-buttons")
+    // 🎲 주사위 굴리기 버튼 삽입
+    waitForElement(".topic-footer-buttons")
       .then((actionArea) => {
         if (!document.querySelector(".dice-roll-button")) {
           const diceBtn = document.createElement("button");
@@ -67,11 +61,6 @@ function initialize(api) {
           diceBtn.addEventListener("click", () => {
             const topicId = topic.id;
 
-            if (!topicId) {
-              alert("토픽 ID를 찾을 수 없습니다.");
-              return;
-            }
-
             fetch("/dice/roll", {
               method: "POST",
               headers: {
@@ -81,12 +70,12 @@ function initialize(api) {
               body: JSON.stringify({ topic_id: topicId }),
             })
               .then((res) => {
-                if (!res.ok) throw new Error("주사위 실패");
+                if (!res.ok) throw new Error("실패");
                 return res.json();
               })
               .then(() => {
                 alert("🎲 주사위 결과가 댓글로 등록되었어요!");
-                location.reload(); // 자동 반영 (댓글 새로고침)
+                location.reload();
               })
               .catch(() => {
                 alert("❌ 주사위 굴리기에 실패했습니다.");
@@ -97,7 +86,7 @@ function initialize(api) {
         }
       })
       .catch((err) => {
-        console.warn("🛑 dice-roll 버튼 생성 실패:", err);
+        console.warn("❌ 주사위 버튼 추가 실패:", err);
       });
   });
 }

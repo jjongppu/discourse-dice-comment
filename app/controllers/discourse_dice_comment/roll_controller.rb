@@ -16,7 +16,12 @@ module ::DiscourseDiceComment
       roll = rand(min..max)
       raw = "🎲 #{roll}! #{current_user.username}님의 운명은!?"
 
-      PostCreator.create!(current_user, topic_id: topic.id, raw: raw)
+      PostCreator.create!(
+        current_user,
+        topic_id: topic.id,
+        raw: raw,
+        is_dice_reply: true 
+      )
 
       render json: success_json
     end

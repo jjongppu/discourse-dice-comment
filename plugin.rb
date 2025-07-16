@@ -52,7 +52,16 @@ after_initialize do
     end
   end
 
-
+  DiscourseEvent.on(:post_created) do |post, opts, user|
+    topic = post.topic
+    next unless topic.present?
+  
+    if topic.custom_fields["dice_only"].to_s == "true"
+      unless opts[:is_dice_reply] == true
+        raise Discourse::InvalidAccess.new("주사위 전용 토픽에는 일반 댓글을 작성할 수 없습니다.")
+      end
+    end
+  end
   
   
     
