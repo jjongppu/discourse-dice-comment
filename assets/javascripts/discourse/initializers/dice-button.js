@@ -56,7 +56,7 @@ function initialize(api) {
     }
 
     // 🎲 주사위 굴리기 버튼 생성
-    waitForElement(".topic-footer-buttons")
+    waitForElement(".topic-footer-main-buttons")
       .then((actionArea) => {
         if (!document.querySelector(".dice-roll-button")) {
           const diceBtn = document.createElement("button");
