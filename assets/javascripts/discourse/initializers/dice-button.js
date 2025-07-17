@@ -34,35 +34,10 @@ function initialize(api) {
 
       // 💥 주사위 버튼 제거
       document.querySelector(".dice-roll-button")?.remove();
-      // footer 댓글달기 
-      document.querySelectorAll('.topic-footer-main-buttons .create.topic-footer-button')
-      .forEach(el => el.style.display = 'block'); 
 
       return;
     }
 
-    // 🎯 댓글창 제거
-    document.querySelectorAll(".composer-container")?.forEach((el) => el.remove());
-
-    // 🎯 댓글, 인용, 답글 버튼 제거
-    document
-      .querySelectorAll("button.reply, .post-controls .reply, .post-controls .quote")
-      .forEach((el) => el.remove());
-
-    // footer 댓글달기 css 제거
-    document.querySelectorAll('.topic-footer-main-buttons .create.topic-footer-button')
-      .forEach(el => el.style.display = 'none');  
-
-    // 💬 안내 문구 삽입
-    const timelineEl = document.querySelector(".topic-timeline");
-    if (timelineEl && !document.querySelector(".dice-only-notice")) {
-      const notice = document.createElement("div");
-      notice.className = "dice-only-notice";
-      notice.style =
-        "margin: 1em 0; padding: 1em; background: #f5f5f5; border-radius: 6px; text-align: center;";
-      notice.innerText = "🎲 이 토픽은 주사위 댓글 전용입니다. 일반 댓글을 작성할 수 없습니다.";
-      timelineEl.parentNode.insertBefore(notice, timelineEl);
-    }
 
     // 🎲 주사위 굴리기 버튼 삽입
     waitForElement(".topic-footer-main-buttons")

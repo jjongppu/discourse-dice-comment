@@ -60,18 +60,5 @@ after_initialize do
     end
   end
 
-  DiscourseEvent.on(:post_created) do |post, _opts, _user|
-    topic = post.topic
-    next unless topic.present?
-  
-    if topic.custom_fields["dice_only"].to_s == "true"
-      unless post.custom_fields["is_dice_reply"].to_s == "true"
-        raise Discourse::InvalidAccess.new("주사위 전용 게시글 입니다. 주사위를 굴려주세요!")
-      end
-    end
-  end
-  
-  
-    
   
 end
