@@ -34,6 +34,9 @@ function initialize(api) {
 
       // 💥 주사위 버튼 제거
       document.querySelector(".dice-roll-button")?.remove();
+      // footer 댓글달기 
+      document.querySelectorAll('.topic-footer-main-buttons .create.topic-footer-button')
+      .forEach(el => el.style.display = 'block'); 
 
       return;
     }
@@ -43,8 +46,12 @@ function initialize(api) {
 
     // 🎯 댓글, 인용, 답글 버튼 제거
     document
-      .querySelectorAll("button.create, button.reply, .post-controls .reply, .post-controls .quote")
+      .querySelectorAll("button.reply, .post-controls .reply, .post-controls .quote")
       .forEach((el) => el.remove());
+
+    // footer 댓글달기 css 제거
+    document.querySelectorAll('.topic-footer-main-buttons .create.topic-footer-button')
+      .forEach(el => el.style.display = 'none');  
 
     // 💬 안내 문구 삽입
     const timelineEl = document.querySelector(".topic-timeline");
