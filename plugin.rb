@@ -13,8 +13,7 @@ register_asset 'stylesheets/common/dice-comment.scss'
 after_initialize do
   require_relative 'lib/discourse_dice_comment/engine'
   load File.expand_path('app/serializers/topic_view_serializer_extension.rb', __dir__)
-
-  require_relative 'lib/discourse_dice_comment/engine'
+  load File.expand_path('app/controllers/discourse_dice_comment/roll_controller.rb', __dir__)
 
   Discourse::Application.routes.append do
     ::DiscourseDiceComment::Engine.routes.draw do
