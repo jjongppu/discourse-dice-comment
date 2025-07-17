@@ -63,8 +63,6 @@ function initialize(api) {
                 return res.json();
               })
               .then(() => {
-                alert("🎲 주사위 결과가 댓글로 등록되었어요!");
-                location.reload();
               })
               .catch(() => {
                 alert("❌ 주사위 굴리기에 실패했습니다.");
