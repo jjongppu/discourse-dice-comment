@@ -22,7 +22,7 @@ module ::DiscourseDiceComment
       ]
 
       sound = sound_effects.sample
-      raw = "🎲 #{sound} #{roll}!"
+      raw = "🎲 #{sound} **#{roll}!**"
 
       post = PostCreator.create!(
         current_user,
