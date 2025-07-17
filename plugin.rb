@@ -12,7 +12,7 @@ register_asset 'stylesheets/common/dice-comment.scss'
 
 after_initialize do
   require_relative 'lib/discourse_dice_comment/engine'
-  require_relative 'config/routes'
+  load File.expand_path('config/routes.rb', __dir__)   # ← load로 바꿔야 함!
   load File.expand_path('app/serializers/topic_view_serializer_extension.rb', __dir__)
 
   fields = [
