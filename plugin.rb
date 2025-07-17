@@ -12,8 +12,17 @@ register_asset 'stylesheets/common/dice-comment.scss'
 
 after_initialize do
   require_relative 'lib/discourse_dice_comment/engine'
-  load File.expand_path('config/routes.rb', __dir__)   # ← load로 바꿔야 함!
   load File.expand_path('app/serializers/topic_view_serializer_extension.rb', __dir__)
+
+  require_relative 'lib/discourse_dice_comment/engine'
+
+  Discourse::Application.routes.append do
+    ::DiscourseDiceComment::Engine.routes.draw do
+      post '/roll-dice/:topic_id' => 'roll#create'
+    end
+
+    mount ::DiscourseDiceComment::Engine, at: '/dice'
+  end
 
   fields = [
     { name: 'dice_only', type: 'boolean' },
