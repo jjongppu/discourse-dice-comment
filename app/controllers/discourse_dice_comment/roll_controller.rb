@@ -16,7 +16,13 @@ module ::DiscourseDiceComment
       max = 100 if max <= 0
 
       roll = rand(min..max)
-      raw = "🎲 #{roll}! #{current_user.username}님의 운명은!?"
+
+      sound_effects = [
+        "딸그랑!", "데구르르르...", "또르르르르...", "차르르륵!", "찰칵!", "탁!", "또르르... 뙇!", "슉! 똭!", "와장창! … 딱!"
+      ]
+
+      sound = sound_effects.sample
+      raw = "🎲 #{sound} #{roll}!"
 
       post = PostCreator.create!(
         current_user,
