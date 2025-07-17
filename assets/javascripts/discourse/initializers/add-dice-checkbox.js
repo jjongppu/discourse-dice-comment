@@ -60,16 +60,16 @@ export default {
         checkbox.id = "dice-only-checkbox";
 
         const span = document.createElement("span");
-        span.innerText = "주사위댓글 전용";
+        span.innerText = "주사위 굴리기";
 
         const diceMaxInput = document.createElement("input");
         diceMaxInput.type = "number";
         diceMaxInput.min = "1";
         diceMaxInput.value = 100;
-        diceMaxInput.placeholder = "최대값";
+        diceMaxInput.placeholder = "주사위 최대값";
         diceMaxInput.id = "dice-max-input";
         diceMaxInput.style.marginLeft = "1em";
-        diceMaxInput.style.width = "80px";
+        // diceMaxInput.style.width = "80px";
         diceMaxInput.style.display = "none";
 
         checkboxLabel.appendChild(checkbox);
