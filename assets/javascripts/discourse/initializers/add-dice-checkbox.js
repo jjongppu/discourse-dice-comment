@@ -42,9 +42,8 @@ export default {
 
       api.onAppEvent("composer:opened", () => {
 
-        // Topic 일 경우만 활성
+        const composerController = api.container.lookup("controller:composer");
         if (composerController.model.action !== "createTopic") return;
-
 
         const composerEl = document.querySelector(".composer-fields");
         if (!composerEl || composerEl.querySelector("#dice-only-checkbox")) return;
@@ -78,7 +77,6 @@ export default {
         checkboxLabel.appendChild(diceMaxInput);
         composerEl.appendChild(checkboxLabel);
 
-        const composerController = api.container.lookup("controller:composer");
 
         checkbox.checked = composerController.model.dice_only || false;
         diceMaxInput.value = composerController.model.dice_max;
