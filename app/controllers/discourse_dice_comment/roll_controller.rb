@@ -3,6 +3,8 @@
 module ::DiscourseDiceComment
   class RollController < ::ApplicationController
     requires_plugin 'discourse-dice-comment'
+    skip_before_action :check_xhr
+    skip_before_action :verify_authenticity_token
     before_action :ensure_logged_in
 
     def create
