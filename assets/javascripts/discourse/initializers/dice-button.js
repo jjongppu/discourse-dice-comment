@@ -69,8 +69,7 @@ function initialize(api) {
           diceBtn.addEventListener("click", () => {
             const topicId = topic.id;
 
-            const url = Discourse.getURL(`/dice/roll-dice/${topic.id}`);
-            fetch(url, {
+            fetch(`/dice/roll-dice/${topic.id}`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
