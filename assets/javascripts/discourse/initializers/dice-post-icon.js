@@ -22,6 +22,15 @@ export default {
       api.attachWidgetAction("post", "dicePostIndicator", function () {
         alert("\ud83c\udfb2 \uc8fc\uc0ac\uc704 \uad74\ub9ac\uae30!");
       });
+
+      api.onPageChange(() => {
+        const topicController = api.container.lookup("controller:topic");
+        const posts = topicController?.model?.postStream?.posts;
+        posts?.forEach((p) => {
+          // eslint-disable-next-line no-console
+          console.log(`[dice] post ${p.id} is_dice=${p.is_dice}`);
+        });
+      });
     });
   },
 };
