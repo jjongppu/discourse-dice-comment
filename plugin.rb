@@ -13,6 +13,7 @@ register_asset 'stylesheets/common/dice-comment.scss'
 after_initialize do
   require_relative 'lib/discourse_dice_comment/engine'
   load File.expand_path('app/serializers/topic_view_serializer_extension.rb', __dir__)
+  load File.expand_path('app/serializers/post_serializer_extension.rb', __dir__)
   load File.expand_path('app/controllers/discourse_dice_comment/roll_controller.rb', __dir__)
 
   Discourse::Application.routes.append do
@@ -57,6 +58,31 @@ after_initialize do
 
     add_to_serializer(:topic_list_item, field[:name].to_sym) do
       object.send(field[:name])
+    end
+  end
+
+  post_fields = [
+    { name: 'is_dice', type: 'boolean' },
+    { name: 'dice_value', type: 'string' }
+  ]
+
+  post_fields.each do |field|
+    register_post_custom_field_type(field[:name], field[:type])
+
+    add_to_class(:post, field[:name].to_sym) do
+      custom_fields[field[:name]]
+    end
+
+    add_to_class(:post, "#{field[:name]}=") do |value|
+      custom_fields[field[:name]] = value
+    end
+
+    add_to_serializer(:post, field[:name].to_sym) do
+      object.custom_fields[field[:name]]
+    end
+
+    add_to_serializer(:post, "include_#{field[:name]}?".to_sym) do
+      object.custom_fields.key?(field[:name])
     end
   end
 
