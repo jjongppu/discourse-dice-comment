@@ -56,13 +56,21 @@ function initialize(api) {
               headers: {
                 "Content-Type": "application/json",
                 "X-CSRF-Token": api.csrfToken,
-              }
+              },
             })
               .then((res) => {
                 if (!res.ok) throw new Error("실패");
                 return res.json();
               })
-              .then(() => {
+              .then((data) => {
+                const area = document.querySelector(".topic-footer-main-buttons");
+                if (area) {
+                  const resultEl = document.createElement("div");
+                  resultEl.className = "dice-roll-result";
+                  resultEl.innerText = data.raw || "";
+                  area.appendChild(resultEl);
+                  setTimeout(() => resultEl.remove(), 5000);
+                }
               })
               .catch(() => {
                 alert("❌ 주사위 굴리기에 실패했습니다.");
