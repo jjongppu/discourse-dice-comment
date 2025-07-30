@@ -27,7 +27,11 @@ module ::DiscourseDiceComment
       post = PostCreator.create!(
         current_user,
         topic_id: topic.id,
-        raw: raw
+        raw: raw,
+        custom_fields: {
+          is_dice: true,
+          dice_value: roll.to_s
+        }
       )
 
       render json: success_json
