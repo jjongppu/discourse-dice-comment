@@ -4,7 +4,8 @@ PostSerializer.class_eval do
   attributes :is_dice, :dice_value
 
   def is_dice
-    object.custom_fields['is_dice']
+    value = object.custom_fields['is_dice']
+    [true, "true", "t", "1"].include?(value)
   end
 
   def include_is_dice?
