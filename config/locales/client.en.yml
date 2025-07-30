@@ -3,3 +3,4 @@ en:
     dice_comment:
       checkbox: "Dice reply only"
       roll: "Roll Dice"
+      dice_post: "Dice Comment"
