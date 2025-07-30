@@ -34,7 +34,7 @@ module ::DiscourseDiceComment
         }
       )
 
-      render json: success_json
+      render json: success_json.merge(raw: raw, roll: roll)
     end
   end
 end
