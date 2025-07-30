@@ -3,3 +3,4 @@ ko:
     dice_comment:
       checkbox: "Dice reply only"
       roll: "Roll Dice"
+      dice_post: "주사위 댓글"

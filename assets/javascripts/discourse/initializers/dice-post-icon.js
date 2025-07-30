@@ -3,17 +3,31 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 export default {
   name: "dice-post-icon",
   initialize() {
-    withPluginApi("0.8.7", (api) => {
-      api.decorateWidget("post-menu:before", (helper) => {
-        const post = helper.getModel && helper.getModel();
-        if (post?.is_dice) {
-          return helper.h(
-            "li",
-            { className: "dice-post-icon" },
-            "🎲 주사위 댓글"
+    withPluginApi("1.34.0", (api) => {
+      api.registerValueTransformer(
+        "post-menu-buttons",
+        ({ value: dag, context: { post, buttonKeys } }) => {
+          if (!post?.is_dice) {
+            return;
+          }
+
+          const key = "dice-post-indicator";
+          if (dag.has(key)) {
+            return;
+          }
+
+          dag.addAfter(
+            buttonKeys.REPLY,
+            key,
+            {
+              id: key,
+              translatedLabel: "dice_comment.dice_post",
+              className: "dice-post-icon",
+              title: "dice_comment.dice_post",
+            }
           );
         }
-      });
+      );
     });
   },
 };
