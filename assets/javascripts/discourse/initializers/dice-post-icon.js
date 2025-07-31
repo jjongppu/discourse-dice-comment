@@ -9,7 +9,7 @@ export default {
       api.decorateWidget("post-contents:after", (dec) => {
         const post = dec.getModel();
 
-        if (post.custom_fields?.is_dice) {
+        if (post?.is_dice) {
           return dec.h("div.dice-post-icon", { title: "주사위 댓글" }, "🎲 이 댓글은 주사위로 생성됐어요!");
         }
 
