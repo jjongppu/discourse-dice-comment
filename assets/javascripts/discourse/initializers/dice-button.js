@@ -68,8 +68,8 @@ function initialize(api) {
                   const resultEl = document.createElement("div");
                   resultEl.className = "dice-roll-result";
                   resultEl.innerText = data.raw || "";
-                  area.appendChild(resultEl);
-                  setTimeout(() => resultEl.remove(), 5000);
+                  //area.appendChild(resultEl);
+                  //setTimeout(() => resultEl.remove(), 5000);
                 }
               })
               .catch(() => {

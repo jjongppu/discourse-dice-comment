@@ -1,36 +1,32 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
 
 export default {
-  name: "dice-post-icon",
+  name: "dice-post-indicator",
   initialize() {
-    withPluginApi("0.8.13", (api) => {
-      api.addPostMenuButton("dice-post-indicator", (post) => {
-        if (!post || post.is_dice != 't') {
-          return;
-        }
+    withPluginApi("1.2.0", (api) => {
+      api.modifyClass("controller:topic", {
+        pluginId: "dice-post-indicator",
 
-        return {
-          action: "dicePostIndicator",
-          icon: "gamepad",
-          label: "dice_comment.dice_post",
-          className: "dice-post-icon",
-          title: "dice_comment.dice_post",
-          position: "second-last",
-        };
+        postMenuButtons(buttons, post) {
+          if (post?.custom_fields?.is_dice !== "t") {
+            return buttons;
+          }
+
+          return [
+            ...buttons,
+            {
+              icon: "gamepad",
+              label: "주사위 댓글",
+              className: "dice-post-icon",
+              title: "이 댓글은 주사위 결과입니다",
+              position: "second-last",
+              // action 없이, 단순 표시용!
+            },
+          ];
+        },
       });
 
-      api.attachWidgetAction("post", "dicePostIndicator", function () {
-        alert("\ud83c\udfb2 \uc8fc\uc0ac\uc704 \uad74\ub9ac\uae30!");
-      });
-
-      api.onPageChange(() => {
-        const topicController = api.container.lookup("controller:topic");
-        const posts = topicController?.model?.postStream?.posts;
-        posts?.forEach((p) => {
-          // eslint-disable-next-line no-console
-          console.log(`[dice] post ${p.id} is_dice=${p.is_dice}`);
-        });
-      });
+      // action 생략! 표시만 할 거니까 attachWidgetAction도 필요 없음
     });
   },
 };
