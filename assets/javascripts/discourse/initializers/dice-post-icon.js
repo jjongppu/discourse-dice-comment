@@ -1,26 +1,20 @@
+// dice-post-icon.js
 import { withPluginApi } from "discourse/lib/plugin-api";
 
 export default {
-  name: "dice-post-indicator",
+  name: "dice-post-icon",
+
   initialize() {
-    withPluginApi("1.2.0", (api) => {
-      api.decorateCookedElement(
-        (elem, helper) => {
-          const post = helper.getModel();
+    withPluginApi("0.8.13", (api) => {
+      api.decorateWidget("post-contents:after", (dec) => {
+        const post = dec.getModel();
 
-          if (post?.custom_fields?.is_dice === "t") {
-            // 이미 붙어 있으면 중복 방지
-            if (elem.querySelector(".dice-indicator")) return;
+        if (post.custom_fields?.is_dice) {
+          return dec.h("div.dice-post-icon", { title: "주사위 댓글" }, "🎲 이 댓글은 주사위로 생성됐어요!");
+        }
 
-            const badge = document.createElement("span");
-            badge.className = "dice-indicator";
-            badge.innerText = "🎲 다이스";
-
-            elem.appendChild(badge); // 본문 맨 아래에 추가
-          }
-        },
-        { id: "dice-post-indicator", onlyStream: true }
-      );
+        return null;
+      });
     });
   },
 };
