@@ -5,7 +5,7 @@ export default {
   initialize() {
     withPluginApi("0.8.13", (api) => {
       api.addPostMenuButton("dice-post-indicator", (post) => {
-        if (!post?.is_dice) {
+        if (!post?.is_dice == 't') {
           return;
         }
 

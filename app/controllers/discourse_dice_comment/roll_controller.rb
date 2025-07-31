@@ -22,7 +22,17 @@ module ::DiscourseDiceComment
       ]
 
       sound = sound_effects.sample
-      raw = "🎲 #{sound} **#{roll}!**"
+      special_msg = ""
+
+      if roll == min
+        special_msg = " 😢 최저값..."
+      elsif roll == max
+        special_msg = " 🎉 최고값!!"
+      elsif roll == 77
+        special_msg = " ✨ 럭키 세븐!!"
+      end
+
+      raw = "🎲 #{sound} **#{roll}!**  #{special_msg}"
 
       post = PostCreator.create!(
         current_user,
