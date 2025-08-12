@@ -38,6 +38,11 @@ function initialize(api) {
       return;
     }
 
+    if (topic.current_user_has_dice_post) {
+      document.querySelector(".dice-roll-button")?.remove();
+      return;
+    }
+
 
     // 🎲 주사위 굴리기 버튼 삽입
     waitForElement(".topic-footer-main-buttons")
@@ -49,8 +54,6 @@ function initialize(api) {
           diceBtn.style.marginLeft = "1em";
 
           diceBtn.addEventListener("click", () => {
-            const topicId = topic.id;
-
             fetch(`/dice/roll-dice/${topic.id}`, {
               method: "POST",
               headers: {
@@ -59,7 +62,12 @@ function initialize(api) {
               },
             })
               .then((res) => {
-                if (!res.ok) throw new Error("실패");
+                if (!res.ok) {
+                  if (res.status === 403) {
+                    throw new Error("이미 주사위를 굴렸습니다.");
+                  }
+                  throw new Error("실패");
+                }
                 return res.json();
               })
               .then((data) => {
@@ -71,9 +79,11 @@ function initialize(api) {
                   //area.appendChild(resultEl);
                   //setTimeout(() => resultEl.remove(), 5000);
                 }
+                topic.current_user_has_dice_post = true;
+                document.querySelector(".dice-roll-button")?.remove();
               })
-              .catch(() => {
-                alert("❌ 주사위 굴리기에 실패했습니다.");
+              .catch((e) => {
+                alert(`❌ ${e.message || "주사위 굴리기에 실패했습니다."}`);
               });
           });
 

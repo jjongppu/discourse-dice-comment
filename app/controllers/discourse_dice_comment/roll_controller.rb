@@ -11,6 +11,20 @@ module ::DiscourseDiceComment
       topic = Topic.find(params[:topic_id])
       raise Discourse::NotFound unless topic.custom_fields["dice_only"]
 
+      already_rolled = PostCustomField
+        .joins(:post)
+        .where(
+          name: "is_dice",
+          value: "t",
+          posts: { topic_id: topic.id, user_id: current_user.id }
+        )
+        .exists?
+
+      if already_rolled
+        render json: failed_json.merge(error: "already rolled"), status: 403
+        return
+      end
+
       min = 0
       max = topic.custom_fields["dice_max"].to_i
       max = 100 if max <= 0
